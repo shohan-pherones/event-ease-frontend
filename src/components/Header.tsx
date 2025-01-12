@@ -14,12 +14,6 @@ const Header = () => {
       <li>
         <Link href="/events">Events</Link>
       </li>
-      <li>
-        <Link href="/about">About</Link>
-      </li>
-      <li>
-        <Link href="/contact">Contact</Link>
-      </li>
     </>
   );
 
@@ -62,7 +56,7 @@ const Header = () => {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="avatar mt-2">
               <div className="w-10 aspect-square rounded-full bg-primary">
-                <span className="text-black text-2xl font-bold flex items-center justify-center w-full h-full">
+                <span className="text-2xl font-bold flex items-center justify-center w-full h-full">
                   {user.name.charAt(0)}
                 </span>
               </div>

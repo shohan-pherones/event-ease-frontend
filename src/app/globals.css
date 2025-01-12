@@ -14,12 +14,12 @@
 
 .swiper-pagination-bullet,
 .swiper-pagination-bullet-active {
-  background-color: #fff !important;
+  background-color: #65c3c8 !important;
 }
 
 .swiper-button-next,
 .swiper-button-prev {
-  color: #fff !important;
-  fill: #fff !important;
-  stroke: #fff !important;
+  color: #65c3c8 !important;
+  fill: #65c3c8 !important;
+  stroke: #65c3c8 !important;
 }
