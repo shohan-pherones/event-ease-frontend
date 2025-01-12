@@ -1,4 +1,4 @@
-export interface MessageResponse {
+export interface IMessageResponse {
   message: string;
 }
 
@@ -12,7 +12,7 @@ export interface IUser {
   registeredEvents: IEvent[];
 }
 
-export interface IUserResponse extends MessageResponse {
+export interface IUserResponse extends IMessageResponse {
   user: IUser;
 }
 
@@ -25,7 +25,7 @@ export interface IRegistration extends ILogin {
   name: string;
 }
 
-export interface IAuth extends MessageResponse {
+export interface IAuth extends IMessageResponse {
   accessToken: string;
   refreshToken: string;
 }
@@ -48,15 +48,15 @@ export interface IEvent {
   createdBy: IUser;
 }
 
-export interface IEventsResponse extends MessageResponse {
+export interface IEventsResponse extends IMessageResponse {
   events: IEvent[];
 }
 
-export interface IEventResponse extends MessageResponse {
+export interface IEventResponse extends IMessageResponse {
   event: IEvent;
 }
 
-export interface IEventRegistrationResponse extends MessageResponse {
+export interface IEventRegistrationResponse extends IMessageResponse {
   _id: string;
   registeredEvent: {
     event: IEvent;

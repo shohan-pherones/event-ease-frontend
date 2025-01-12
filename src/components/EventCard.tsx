@@ -2,8 +2,8 @@
 
 import { useCreateEventRegistration } from "@/hooks/api-requests/useCreateEventRegistration";
 import { useGetMyProfile } from "@/hooks/api-requests/useGetMyProfile";
+import { useRevokeEventRegistration } from "@/hooks/api-requests/useRevokeEventRegistration";
 import { IEvent } from "@/interfaces";
-import { cn } from "@/lib/utils";
 import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -14,7 +14,10 @@ import Processing from "./Processing";
 const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const { data } = useGetMyProfile();
-  const { mutate, isLoading } = useCreateEventRegistration();
+  const { mutate: mutateRegisterEntry, isLoading: isRegisterLoading } =
+    useCreateEventRegistration();
+  const { mutate: mutateRevokeEntry, isLoading: isRevokeLoading } =
+    useRevokeEventRegistration();
 
   useEffect(() => {
     const match = data?.user?.registeredEvents.find(
@@ -23,14 +26,32 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
 
     if (match) {
       setIsRegistered(true);
+    } else {
+      setIsRegistered(false);
     }
   }, [event._id, data?.user?.registeredEvents]);
 
   const handleRegisterEntry = () => {
-    mutate(event._id, {
+    mutateRegisterEntry(event._id, {
       onSuccess: (response) => {
         toast.success(response.message);
         setIsRegistered(true);
+      },
+      onError: (err) => {
+        if (axios.isAxiosError(err) && err.response) {
+          toast.error(err.response.data?.message || "An error occurred");
+        } else {
+          toast.error(err.message || "An unexpected error occurred");
+        }
+      },
+    });
+  };
+
+  const handleRevokeEntry = () => {
+    mutateRevokeEntry(event._id, {
+      onSuccess: (response) => {
+        toast.success(response.message);
+        setIsRegistered(false);
       },
       onError: (err) => {
         if (axios.isAxiosError(err) && err.response) {
@@ -70,31 +91,40 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
           </span>
         </p>
         <div className="flex items-center gap-5 justify-between">
-          <button
-            onClick={handleRegisterEntry}
-            disabled={
-              (!isRegistered &&
-                event.maxAttendees - event.registeredAttendees?.length === 0) ||
-              isPast ||
-              isLoading
-            }
-            className={cn(
-              "btn",
-              isRegistered ? "btn-primary" : "btn-secondary"
-            )}
-          >
-            {(!isRegistered &&
-              event.maxAttendees - event.registeredAttendees?.length === 0) ||
-            isPast ? (
-              "Closed"
-            ) : isRegistered && !isPast ? (
-              "Revoke Entry"
-            ) : isLoading ? (
-              <Processing />
-            ) : (
-              "Register Entry"
-            )}
-          </button>
+          {isRegistered ? (
+            <button
+              onClick={handleRevokeEntry}
+              disabled={isPast || isRevokeLoading}
+              className="btn btn-primary"
+            >
+              {isPast ? (
+                "Closed"
+              ) : isRevokeLoading ? (
+                <Processing />
+              ) : (
+                "Revoke Entry"
+              )}
+            </button>
+          ) : (
+            <button
+              onClick={handleRegisterEntry}
+              disabled={
+                event.maxAttendees - event.registeredAttendees?.length === 0 ||
+                isPast ||
+                isRegisterLoading
+              }
+              className="btn btn-secondary"
+            >
+              {event.maxAttendees - event.registeredAttendees?.length === 0 ||
+              isPast ? (
+                "Closed"
+              ) : isRegisterLoading ? (
+                <Processing />
+              ) : (
+                "Register Entry"
+              )}
+            </button>
+          )}
           <Link href={`/events/${event._id}`} className="btn btn-ghost">
             View Details
           </Link>
