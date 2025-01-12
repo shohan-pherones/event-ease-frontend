@@ -9,7 +9,11 @@ interface EventsContainerProps {
 const EventsContainer = ({ events }: EventsContainerProps) => {
   return (
     <section className="wrapper min-h-[calc(100vh-4rem)] ">
-      <SectionTitle title="Upcoming Events" />
+      <SectionTitle
+        title={`Upcoming Events: ${
+          events.filter((ev) => new Date() < new Date(ev.date)).length
+        }`}
+      />
       <div className="grid-container mb-5 md:mb-10">
         {events
           .filter((ev) => new Date() < new Date(ev.date))
@@ -17,7 +21,11 @@ const EventsContainer = ({ events }: EventsContainerProps) => {
             <EventCard key={ev._id} event={ev} />
           ))}
       </div>
-      <SectionTitle title="Past Events" />
+      <SectionTitle
+        title={`Past Events: ${
+          events.filter((ev) => new Date() > new Date(ev.date)).length
+        }`}
+      />
       <div className="grid-container">
         {events
           .filter((ev) => new Date() >= new Date(ev.date))
