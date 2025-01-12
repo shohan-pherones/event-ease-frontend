@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <ReactQueryClientProvider>
-      <html lang="en" data-theme="sunset">
+      <html lang="en" data-theme="cupcake">
         <body className={cn(museoModerno.className, "antialiased")}>
           <ReduxStoreProvider>
             <Toaster
