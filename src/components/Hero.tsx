@@ -2,7 +2,7 @@ import Slider from "./Slider";
 
 const Hero = () => {
   return (
-    <section className="h-[calc(100vh-5rem)]">
+    <section className="h-[calc(100vh-4rem)]">
       <Slider />
     </section>
   );

@@ -49,7 +49,7 @@ const SignUpPage = () => {
 
   return (
     <main>
-      <section className="min-h-[calc(100vh-5rem)] container mx-auto max-w-2xl py-10 md:py-20">
+      <section className="min-h-[calc(100vh-4rem)] container mx-auto max-w-2xl py-10 md:py-20">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-2 justify-center"
