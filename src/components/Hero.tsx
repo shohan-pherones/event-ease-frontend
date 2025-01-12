@@ -1,11 +1,5 @@
-import Slider from "./Slider";
-
 const Hero = () => {
-  return (
-    <section className="h-[calc(100vh-4rem)]">
-      <Slider />
-    </section>
-  );
+  return <section className="h-[calc(100vh-4rem)]">Hero</section>;
 };
 
 export default Hero;
