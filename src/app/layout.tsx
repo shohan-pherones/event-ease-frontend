@@ -1,8 +1,10 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
+import ReduxStoreProvider from "@/providers/ReduxStoreProvider";
 import type { Metadata } from "next";
 import { MuseoModerno } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 const museoModerno = MuseoModerno({ subsets: ["latin"] });
@@ -19,9 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="sunset">
       <body className={cn(museoModerno.className, "antialiased")}>
-        <Header />
-        {children}
-        <Footer />
+        <ReduxStoreProvider>
+          <Toaster
+            position="bottom-right"
+            reverseOrder={false}
+            toastOptions={{
+              duration: 5000,
+            }}
+          />
+          <Header />
+          {children}
+          <Footer />
+        </ReduxStoreProvider>
       </body>
     </html>
   );
