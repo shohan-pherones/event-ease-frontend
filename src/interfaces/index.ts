@@ -12,6 +12,10 @@ export interface IUser {
   registeredEvents: IEvent[];
 }
 
+export interface IUserResponse extends MessageResponse {
+  user: IUser;
+}
+
 export interface ILogin {
   email: string;
   password: string;
