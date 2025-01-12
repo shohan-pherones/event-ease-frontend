@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
+import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
 import ReduxStoreProvider from "@/providers/ReduxStoreProvider";
 import type { Metadata } from "next";
 import { MuseoModerno } from "next/font/google";
@@ -19,21 +20,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="sunset">
-      <body className={cn(museoModerno.className, "antialiased")}>
-        <ReduxStoreProvider>
-          <Toaster
-            position="bottom-right"
-            reverseOrder={false}
-            toastOptions={{
-              duration: 5000,
-            }}
-          />
-          <Header />
-          {children}
-          <Footer />
-        </ReduxStoreProvider>
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en" data-theme="sunset">
+        <body className={cn(museoModerno.className, "antialiased")}>
+          <ReduxStoreProvider>
+            <Toaster
+              position="bottom-right"
+              reverseOrder={false}
+              toastOptions={{
+                duration: 5000,
+              }}
+            />
+            <Header />
+            {children}
+            <Footer />
+          </ReduxStoreProvider>
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
