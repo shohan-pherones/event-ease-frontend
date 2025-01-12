@@ -55,3 +55,11 @@ export interface IEventsResponse extends MessageResponse {
 export interface IEventResponse extends MessageResponse {
   event: IEvent;
 }
+
+export interface IEventRegistrationResponse extends MessageResponse {
+  _id: string;
+  registeredEvent: {
+    event: IEvent;
+    attendee: IUser;
+  };
+}

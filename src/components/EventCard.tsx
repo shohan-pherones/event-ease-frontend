@@ -1,15 +1,20 @@
 "use client";
 
+import { useCreateEventRegistration } from "@/hooks/api-requests/useCreateEventRegistration";
 import { useGetMyProfile } from "@/hooks/api-requests/useGetMyProfile";
 import { IEvent } from "@/interfaces";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Processing from "./Processing";
 
 const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const { data } = useGetMyProfile();
+  const { mutate, isLoading } = useCreateEventRegistration();
 
   useEffect(() => {
     const match = data?.user?.registeredEvents.find(
@@ -20,6 +25,22 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
       setIsRegistered(true);
     }
   }, [event._id, data?.user?.registeredEvents]);
+
+  const handleRegisterEntry = () => {
+    mutate(event._id, {
+      onSuccess: (response) => {
+        toast.success(response.message);
+        setIsRegistered(true);
+      },
+      onError: (err) => {
+        if (axios.isAxiosError(err) && err.response) {
+          toast.error(err.response.data?.message || "An error occurred");
+        } else {
+          toast.error(err.message || "An unexpected error occurred");
+        }
+      },
+    });
+  };
 
   return (
     <div className="card bg-base-100 shadow-md">
@@ -50,10 +71,12 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
         </p>
         <div className="flex items-center gap-5 justify-between">
           <button
+            onClick={handleRegisterEntry}
             disabled={
               (!isRegistered &&
                 event.maxAttendees - event.registeredAttendees?.length === 0) ||
-              isPast
+              isPast ||
+              isLoading
             }
             className={cn(
               "btn",
@@ -62,11 +85,15 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
           >
             {(!isRegistered &&
               event.maxAttendees - event.registeredAttendees?.length === 0) ||
-            isPast
-              ? "Closed"
-              : isRegistered && !isPast
-              ? "Revoke Entry"
-              : "Register Entry"}
+            isPast ? (
+              "Closed"
+            ) : isRegistered && !isPast ? (
+              "Revoke Entry"
+            ) : isLoading ? (
+              <Processing />
+            ) : (
+              "Register Entry"
+            )}
           </button>
           <Link href={`/events/${event._id}`} className="btn btn-ghost">
             View Details
