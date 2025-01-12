@@ -1,8 +1,26 @@
+"use client";
+
+import { useGetMyProfile } from "@/hooks/api-requests/useGetMyProfile";
 import { IEvent } from "@/interfaces";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
+  const { data } = useGetMyProfile();
+
+  useEffect(() => {
+    const match = data?.user?.registeredEvents.find(
+      (ev) => ev._id === event._id
+    );
+
+    if (match) {
+      setIsRegistered(true);
+    }
+  }, [event._id, data?.user?.registeredEvents]);
+
   return (
     <div className="card bg-base-100 shadow-md">
       <div className="card-body">
@@ -33,14 +51,21 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
         <div className="flex items-center gap-5 justify-between">
           <button
             disabled={
-              event.maxAttendees - event.registeredAttendees?.length === 0 ||
+              (!isRegistered &&
+                event.maxAttendees - event.registeredAttendees?.length === 0) ||
               isPast
             }
-            className="btn btn-secondary"
+            className={cn(
+              "btn",
+              isRegistered ? "btn-primary" : "btn-secondary"
+            )}
           >
-            {event.maxAttendees - event.registeredAttendees?.length === 0 ||
+            {(!isRegistered &&
+              event.maxAttendees - event.registeredAttendees?.length === 0) ||
             isPast
               ? "Closed"
+              : isRegistered && !isPast
+              ? "Revoke Entry"
               : "Register Entry"}
           </button>
           <Link href={`/events/${event._id}`} className="btn btn-ghost">
