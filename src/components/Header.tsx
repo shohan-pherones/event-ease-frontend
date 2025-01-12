@@ -19,7 +19,7 @@ const Header = () => {
   );
 
   return (
-    <header className="navbar bg-base-100 h-20 max-h-20 sticky top-0 z-50">
+    <header className="navbar bg-base-100/50 backdrop-blur-lg h-20 max-h-20 sticky top-0 z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -40,7 +40,7 @@ const Header = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100/50 backdrop-blur-lg rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             {linkItems}
           </ul>
@@ -53,7 +53,7 @@ const Header = () => {
         <ul className="menu menu-horizontal px-1">{linkItems}</ul>
       </div>
       <div className="navbar-end">
-        <Link href="/sign-in" className="btn btn-secondary">
+        <Link href="/sign-in" className="btn btn-primary">
           Login
         </Link>
       </div>

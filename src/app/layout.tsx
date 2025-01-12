@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="fantasy">
+    <html lang="en" data-theme="sunset">
       <body className={cn(museoModerno.className, "antialiased")}>
         <Header />
         {children}
