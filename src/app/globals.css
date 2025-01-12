@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .wrapper {
+    @apply container mx-auto px-5 md:px-10 py-10 md:py-16;
+  }
+
+  .grid-container {
+    @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 md:gap-10;
+  }
+}
+
 .swiper-pagination-bullet,
 .swiper-pagination-bullet-active {
   background-color: #fff !important;
