@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { MuseoModerno } from "next/font/google";
@@ -15,9 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="retro">
+    <html lang="en" data-theme="fantasy">
       <body className={cn(museoModerno.className, "antialiased")}>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
