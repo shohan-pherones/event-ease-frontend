@@ -8,6 +8,7 @@ import { IEvent } from "@/interfaces";
 import axios from "axios";
 import { format } from "date-fns";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Processing from "./Processing";
@@ -26,6 +27,9 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   const { mutate: mutateRevokeEntry, isLoading: isRevokeLoading } =
     useRevokeEventRegistration();
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   useEffect(() => {
     const match = data?.user?.registeredEvents.find(
       (ev) => ev._id === event._id
@@ -39,6 +43,10 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   }, [event._id, data?.user]);
 
   const handleRegisterEntry = () => {
+    if (!user) {
+      return router.push(`/sign-in?redirect=${pathname}`);
+    }
+
     mutateRegisterEntry(event._id, {
       onSuccess: (response) => {
         toast.success(response.message);
@@ -56,6 +64,10 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   };
 
   const handleRevokeEntry = () => {
+    if (!user) {
+      return router.push(`/sign-in?redirect=${pathname}`);
+    }
+
     mutateRevokeEntry(event._id, {
       onSuccess: (response) => {
         toast.success(response.message);

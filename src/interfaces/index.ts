@@ -10,6 +10,7 @@ export interface IUser {
   role: "user" | "admin";
   events: IEvent[];
   registeredEvents: IEvent[];
+  createdAt: Date;
 }
 
 export interface IUserResponse extends IMessageResponse {

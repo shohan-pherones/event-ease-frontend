@@ -3,10 +3,12 @@
 import EventsContainer from "@/components/EventsContainer";
 import Loading from "@/components/Loading";
 import { useGetMyProfile } from "@/hooks/api-requests/useGetMyProfile";
+import useAuth from "@/hooks/useAuth";
 import { notFound } from "next/navigation";
 
 const EventsIHaveRegisteredPage = () => {
-  const { data, isLoading } = useGetMyProfile();
+  const { user } = useAuth();
+  const { data, isLoading } = useGetMyProfile(user?._id);
 
   if (isLoading) {
     return <Loading />;
