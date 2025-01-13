@@ -11,7 +11,7 @@ export const useGetEventDetails = (eventId?: string) => {
     return res.data;
   };
 
-  const { data, isLoading, error } = useQuery<IEventResponse, Error>(
+  const { data, isLoading, error, refetch } = useQuery<IEventResponse, Error>(
     "fetchEventDetails",
     getEventDetailsRequestHandler,
     { enabled: !!eventId }
@@ -21,5 +21,5 @@ export const useGetEventDetails = (eventId?: string) => {
     toast.error(error.response?.data?.message || "An error occurred");
   }
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch };
 };
