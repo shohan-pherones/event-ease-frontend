@@ -42,9 +42,9 @@ export interface IAuthStorage extends IAuth {
 export interface IEvent {
   _id: string;
   name: string;
-  date: Date;
+  date: Date | string;
   location: string;
-  maxAttendees: number;
+  maxAttendees: number | string;
   registeredAttendees: IUser[];
   createdBy: IUser;
 }

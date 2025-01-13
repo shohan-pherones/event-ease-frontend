@@ -16,7 +16,7 @@ import Processing from "./Processing";
 const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [availableTickets, setAvailableTickets] = useState<number>(
-    event.maxAttendees - event.registeredAttendees?.length
+    (event.maxAttendees as number) - event.registeredAttendees?.length
   );
 
   const { user } = useAuth();
