@@ -54,7 +54,7 @@ const EventDetailsPage = ({
         name: data.event.name,
         date: toLocalDateTime(data.event.date),
         location: data.event.location,
-        maxAttendees: data.event.maxAttendees,
+        maxAttendees: data.event.maxAttendees.toString(),
       });
     }
   }, [data?.event, reset]);
@@ -150,7 +150,7 @@ const EventDetailsPage = ({
             <p>
               Available tickets:{" "}
               <b>
-                {data.event.maxAttendees -
+                {(data.event.maxAttendees as number) -
                   data.event.registeredAttendees.length}
               </b>
             </p>

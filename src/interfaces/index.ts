@@ -44,7 +44,7 @@ export interface IEvent {
   name: string;
   date: Date | string;
   location: string;
-  maxAttendees: number;
+  maxAttendees: number | string;
   registeredAttendees: IUser[];
   createdBy: IUser;
 }
