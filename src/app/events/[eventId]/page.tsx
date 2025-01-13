@@ -2,6 +2,7 @@
 
 import Loading from "@/components/Loading";
 import Processing from "@/components/Processing";
+import { useSocket } from "@/contexts/SocketContext";
 import { useDeleteEvent } from "@/hooks/api-requests/useDeleteEvent";
 import { useGetEventDetails } from "@/hooks/api-requests/useGetEventDetails";
 import { useUpdateEvent } from "@/hooks/api-requests/useUpdateEvent";
@@ -31,6 +32,7 @@ const EventDetailsPage = ({
   const router = useRouter();
   const deleteMutation = useDeleteEvent();
   const { mutate, isLoading: isUpdateLoading } = useUpdateEvent(eventId);
+  const { socket } = useSocket();
 
   const toLocalDateTime = (utcDate: string | Date) => {
     const date = new Date(utcDate);
@@ -65,6 +67,10 @@ const EventDetailsPage = ({
         toast.success(response.message);
         setIsModalOpen(false);
         refetch();
+
+        socket?.on("event:update", (res) => {
+          console.log(res);
+        });
       },
       onError: (err) => {
         if (axios.isAxiosError(err) && err.response) {

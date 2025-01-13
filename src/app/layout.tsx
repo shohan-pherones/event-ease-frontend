@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { SocketProvider } from "@/contexts/SocketContext";
 import { cn } from "@/lib/utils";
 import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
 import ReduxStoreProvider from "@/providers/ReduxStoreProvider";
@@ -24,16 +25,18 @@ export default function RootLayout({
       <html lang="en" data-theme="cupcake">
         <body className={cn(museoModerno.className, "antialiased")}>
           <ReduxStoreProvider>
-            <Toaster
-              position="bottom-right"
-              reverseOrder={false}
-              toastOptions={{
-                duration: 5000,
-              }}
-            />
-            <Header />
-            {children}
-            <Footer />
+            <SocketProvider>
+              <Toaster
+                position="bottom-right"
+                reverseOrder={false}
+                toastOptions={{
+                  duration: 5000,
+                }}
+              />
+              <Header />
+              {children}
+              <Footer />
+            </SocketProvider>
           </ReduxStoreProvider>
         </body>
       </html>

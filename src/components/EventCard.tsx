@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Processing from "./Processing";
+import { useSocket } from "@/contexts/SocketContext";
 
 const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
@@ -29,6 +30,7 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
 
   const pathname = usePathname();
   const router = useRouter();
+  const { socket } = useSocket();
 
   useEffect(() => {
     const match = data?.user?.registeredEvents.find(
@@ -52,6 +54,14 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
         toast.success(response.message);
         setIsRegistered(true);
         setAvailableTickets((prev) => prev - 1);
+
+        socket?.on("event:registration", (res) => {
+          console.log(res);
+        });
+
+        socket?.on("event:max-attendees-reached", (res) => {
+          console.log(res);
+        });
       },
       onError: (err) => {
         if (axios.isAxiosError(err) && err.response) {
