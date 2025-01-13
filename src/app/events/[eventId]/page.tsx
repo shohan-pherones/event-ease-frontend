@@ -1,11 +1,14 @@
 "use client";
 
 import Loading from "@/components/Loading";
+import Processing from "@/components/Processing";
+import { useDeleteEvent } from "@/hooks/api-requests/useDeleteEvent";
 import { useGetEventDetails } from "@/hooks/api-requests/useGetEventDetails";
 import useAuth from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { notFound, useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const EventDetailsPage = ({
   params,
@@ -13,12 +16,15 @@ const EventDetailsPage = ({
   params: Promise<{ eventId: string }>;
 }) => {
   const [isCreatedByMe, setIsCreatedByMe] = useState<boolean>(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
 
   const { eventId } = use(params);
   const { data, isLoading } = useGetEventDetails(eventId);
   const { user } = useAuth();
 
   const router = useRouter();
+
+  const deleteMutation = useDeleteEvent();
 
   useEffect(() => {
     if (user?._id === data?.event.createdBy._id) {
@@ -38,7 +44,26 @@ const EventDetailsPage = ({
 
   const handleUpdate = () => {};
 
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    if (
+      confirm(
+        "Are you sure you want to delete this event? This action cannot be undone."
+      )
+    ) {
+      try {
+        setIsDeleteLoading(true);
+        await deleteMutation.mutateAsync(eventId);
+        toast.success("Event deleted successfully.");
+        router.push("/events");
+      } catch (error) {
+        toast.error(
+          `Failed to delete the event. Please try again later. ${error}`
+        );
+      } finally {
+        setIsDeleteLoading(false);
+      }
+    }
+  };
 
   return (
     <main>
@@ -91,8 +116,12 @@ const EventDetailsPage = ({
                 <button className="btn btn-primary" onClick={handleUpdate}>
                   Modify Event
                 </button>
-                <button className="btn btn-primary" onClick={handleDelete}>
-                  Delete Event
+                <button
+                  disabled={isDeleteLoading}
+                  className="btn btn-primary"
+                  onClick={handleDelete}
+                >
+                  {isDeleteLoading ? <Processing /> : "Delete Event"}
                 </button>
               </>
             )}
