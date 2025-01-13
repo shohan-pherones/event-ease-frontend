@@ -222,8 +222,8 @@ const EventDetailsPage = ({
 
       {isModalOpen && (
         <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-[2]"></div>
-          <div className="fixed z-[3] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 md:p-10 rounded-xl bg-base-100 w-full max-w-2xl shadow-lg">
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-[102]"></div>
+          <div className="fixed z-[103] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 md:p-10 rounded-xl bg-base-100 w-full max-w-2xl shadow-lg">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
