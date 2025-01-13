@@ -3,6 +3,7 @@
 import { useCreateEventRegistration } from "@/hooks/api-requests/useCreateEventRegistration";
 import { useGetMyProfile } from "@/hooks/api-requests/useGetMyProfile";
 import { useRevokeEventRegistration } from "@/hooks/api-requests/useRevokeEventRegistration";
+import useAuth from "@/hooks/useAuth";
 import { IEvent } from "@/interfaces";
 import axios from "axios";
 import { format } from "date-fns";
@@ -13,7 +14,13 @@ import Processing from "./Processing";
 
 const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-  const { data } = useGetMyProfile();
+  const [availableTickets, setAvailableTickets] = useState<number>(
+    event.maxAttendees - event.registeredAttendees?.length
+  );
+
+  const { user } = useAuth();
+  const { data } = useGetMyProfile(user?._id);
+
   const { mutate: mutateRegisterEntry, isLoading: isRegisterLoading } =
     useCreateEventRegistration();
   const { mutate: mutateRevokeEntry, isLoading: isRevokeLoading } =
@@ -29,13 +36,14 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
     } else {
       setIsRegistered(false);
     }
-  }, [event._id, data?.user?.registeredEvents]);
+  }, [event._id, data?.user]);
 
   const handleRegisterEntry = () => {
     mutateRegisterEntry(event._id, {
       onSuccess: (response) => {
         toast.success(response.message);
         setIsRegistered(true);
+        setAvailableTickets((prev) => prev - 1);
       },
       onError: (err) => {
         if (axios.isAxiosError(err) && err.response) {
@@ -52,6 +60,7 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
       onSuccess: (response) => {
         toast.success(response.message);
         setIsRegistered(false);
+        setAvailableTickets((prev) => prev + 1);
       },
       onError: (err) => {
         if (axios.isAxiosError(err) && err.response) {
@@ -86,9 +95,7 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
         </p>
         <p>
           Available Tickets:{" "}
-          <span className="font-medium">
-            {event.maxAttendees - event.registeredAttendees?.length}
-          </span>
+          <span className="font-medium">{availableTickets}</span>
         </p>
         <div className="flex items-center gap-5 justify-between">
           {isRegistered ? (
@@ -108,15 +115,10 @@ const EventCard = ({ event, isPast }: { event: IEvent; isPast?: boolean }) => {
           ) : (
             <button
               onClick={handleRegisterEntry}
-              disabled={
-                event.maxAttendees - event.registeredAttendees?.length === 0 ||
-                isPast ||
-                isRegisterLoading
-              }
+              disabled={availableTickets === 0 || isPast || isRegisterLoading}
               className="btn btn-secondary"
             >
-              {event.maxAttendees - event.registeredAttendees?.length === 0 ||
-              isPast ? (
+              {availableTickets === 0 || isPast ? (
                 "Closed"
               ) : isRegisterLoading ? (
                 <Processing />

@@ -1,7 +1,7 @@
+import { API_BASE_URL } from "@/constants";
 import { IEventRegistrationResponse } from "@/interfaces";
 import { axiosInstance } from "@/lib/axiosInstance";
 import { useMutation } from "react-query";
-import { API_BASE_URL } from "../../../constants";
 
 export const useCreateEventRegistration = () => {
   const createEventRegistrationRequestHandler = async (

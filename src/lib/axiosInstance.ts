@@ -1,5 +1,5 @@
+import { API_BASE_URL } from "@/constants";
 import axios from "axios";
-import { API_BASE_URL } from "../../constants";
 import { logout, saveCredentials } from "../redux/features/auth/authSlice";
 import { RootState, store } from "../redux/store";
 

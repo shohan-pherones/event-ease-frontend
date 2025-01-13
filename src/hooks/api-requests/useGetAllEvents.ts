@@ -1,9 +1,9 @@
+import { API_BASE_URL } from "@/constants";
 import { IEventsResponse } from "@/interfaces";
 import { axiosInstance } from "@/lib/axiosInstance";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useQuery } from "react-query";
-import { API_BASE_URL } from "../../../constants";
 
 export const useGetAllEvents = () => {
   const getAllEventsRequestHandler = async (): Promise<IEventsResponse> => {
